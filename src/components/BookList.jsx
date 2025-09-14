@@ -5,7 +5,12 @@ export default function BookList() {
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
-    listBooks().then(setBooks).catch(console.error);
+    listBooks()
+        .then((data) => {
+          if (Array.isArray(data)) setBooks(data);
+          else setBooks([]);  // fallback if error
+        })
+        .catch(() => setBooks([]));
   }, []);
 
   return (

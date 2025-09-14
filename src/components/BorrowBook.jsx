@@ -7,10 +7,21 @@ export default function BorrowBook() {
   const [selectedBook, setSelectedBook] = useState("");
   const [selectedMember, setSelectedMember] = useState("");
 
-  useEffect(() => {
-    listBooks().then(setBooks);
-    listMembers().then(setMembers);
-  }, []);
+useEffect(() => {
+  listBooks()
+    .then((data) => {
+      if (Array.isArray(data)) setBooks(data);
+      else setBooks([]);  // fallback if error
+    })
+    .catch(() => setBooks([]));
+
+  listMembers()
+    .then((data) => {
+      if (Array.isArray(data)) setMembers(data);
+      else setMembers([]);
+    })
+    .catch(() => setMembers([]));
+}, []);
 
   const handleBorrow = async () => {
     if (!selectedBook || !selectedMember) {
