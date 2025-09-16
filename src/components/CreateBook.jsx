@@ -6,7 +6,10 @@ export default function CreateBook({ onBookCreated }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const book = await createBook(form);
+    const book = await createBook({
+      ...form,
+      total_copies: form.total_copies === "" ? 1 : form.total_copies,
+    });
     onBookCreated(book);
     setForm({ title: "", author: "", total_copies: 1 });
   };
@@ -29,8 +32,15 @@ export default function CreateBook({ onBookCreated }) {
         />
         <input
           type="number"
-          value={form.total_copies}
-          onChange={(e) => setForm({ ...form, total_copies: parseInt(e.target.value) })}
+          value={form.total_copies || ""}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              total_copies:
+                e.target.value === "" ? "" : parseInt(e.target.value, 10),
+            })
+          }
+          min="1"
         />
         <button type="submit">Add</button>
       </form>
